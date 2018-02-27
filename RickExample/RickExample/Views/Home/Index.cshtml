@@ -30,11 +30,28 @@
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
-<div class="rick-file-listing">
+<div class="rick-disk-info">
+    <h3>Disk Information </h3>
     <ul>
-        @foreach (var file in Model.FileNames)
+        <li><strong>Volume Label</strong>: @Model.DriveInformation.VolumeLabel</li>
+        <li><strong>Total Free Space</strong>: @Model.DriveInformation.TotalFreeSpace.ToString()</li>
+    </ul>
+</div>
+
+<div class="rick-file-listing">
+    <h3>File Information</h3>
+    <ul>
+        @foreach (var file in Model.MyFiles)
         {
-            <li>@file</li>
+            <li>
+                <b>File Name: </b>@file.FileName
+                <ul>
+                    <li><b>Directry Name:</b> @file.DirectoryName</li>
+                    <li><b>Creation Date Time:</b> @file.CreationTime.ToLongTimeString()</li>
+                    <li><b>Extension:</b> @file.Extension</li>
+                    <li><b>Read Only?</b> @(file.IsReadOnly ? "Yes" : "No")</li>
+                </ul>
+            </li>
         }
     </ul>
 </div>

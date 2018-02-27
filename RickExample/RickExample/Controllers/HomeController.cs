@@ -11,9 +11,40 @@ namespace RickExample.Controllers
     {
         public ActionResult Index()
         {
+            // option #1 - retrieve list of filenames (as full paths) 
+            //var vm = new FilesViewModel();
+            //var files = System.IO.Directory.GetFiles(@"C:\code\me\RickExample\RickExample\fonts");
+            //vm.FileNames = files;
+            //return View(vm);
+
+
+            // option #2 - get more information 
             var vm = new FilesViewModel();
-            var files = System.IO.Directory.GetFiles(@"C:\code\me\RickExample\RickExample\fonts");
-            vm.FileNames = files;
+
+            // get info from drive & append to View Model
+            System.IO.DriveInfo drive = new System.IO.DriveInfo(@"C:\");
+            var driveInfo = new RickExample.Models.MyDriveInfo();
+            driveInfo.TotalFreeSpace = driveInfo.TotalFreeSpace;
+            driveInfo.VolumeLabel = driveInfo.VolumeLabel;
+            vm.DriveInformation = driveInfo;
+
+            // get file information 
+            var files = System.IO.Directory.GetFiles(@"C:\code\ForRick\RickExample\RickExample\fonts");
+            var filesInfo = new List<MyFileInfo>();
+            foreach (var file in files)
+            {
+                var currentFile = new System.IO.FileInfo(file);
+                var outputFileInfo = new RickExample.Models.MyFileInfo();
+                outputFileInfo.FileName = currentFile.Name;
+                outputFileInfo.CreationTime = currentFile.CreationTime;
+                outputFileInfo.DirectoryName = currentFile.DirectoryName;
+                outputFileInfo.Extension = currentFile.Extension;
+                outputFileInfo.IsReadOnly = currentFile.IsReadOnly; 
+                filesInfo.Add(outputFileInfo);
+            }
+            vm.MyFiles = filesInfo;
+
+            // return View with data 
             return View(vm);
         }
 
