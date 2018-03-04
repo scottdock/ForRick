@@ -31,10 +31,13 @@ namespace RickExample.Controllers
             // get file information 
             var files = System.IO.Directory.GetFiles(@"C:\code\ForRick\RickExample\RickExample\fonts");
             var filesInfo = new List<MyFileInfo>();
+            var ctr = 0;
             foreach (var file in files)
             {
                 var currentFile = new System.IO.FileInfo(file);
                 var outputFileInfo = new RickExample.Models.MyFileInfo();
+                ctr++;
+                outputFileInfo.FileId = ctr;
                 outputFileInfo.FileName = currentFile.Name;
                 outputFileInfo.CreationTime = currentFile.CreationTime;
                 outputFileInfo.DirectoryName = currentFile.DirectoryName;
@@ -43,9 +46,23 @@ namespace RickExample.Controllers
                 filesInfo.Add(outputFileInfo);
             }
             vm.MyFiles = filesInfo;
+            vm.MyFilesSelectList = BuildSelectListItemFromModelList(vm.MyFiles);
 
             // return View with data 
             return View(vm);
+        }
+
+        private List<SelectListItem> BuildSelectListItemFromModelList(IEnumerable<MyFileInfo> myFiles)
+        {
+            var items = new List<SelectListItem>();
+            var ctr = 0;
+            foreach (var file in myFiles)
+            {
+                ctr++;
+                items.Add(new SelectListItem { Text = file.FileName, Value = ctr.ToString() });
+            }
+            return items;
+
         }
 
         public ActionResult About()
