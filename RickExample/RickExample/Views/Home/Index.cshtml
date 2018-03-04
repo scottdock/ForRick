@@ -1,6 +1,7 @@
 ﻿@model RickExample.Models.FilesViewModel
 @{
     ViewBag.Title = "Home Page";
+    int ctr = 0;
 }
 
 <div class="jumbotron">
@@ -54,4 +55,25 @@
             </li>
         }
     </ul>
+
+    <div id="files-select">
+        <h3>Select Example</h3>
+        <select id="my-files-select">
+            @foreach (var file in Model.MyFiles)
+            {
+                <option id="@file.FileId.ToString()">@file.FileName</option>
+            }
+        </select>
+    </div>
+
+    <div id="files-list-box">
+        <h3>List Box Example</h3>
+        <h4>Key is to create a List < Select List Item ></h4>
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            @Html.ListBoxFor(m => m.MyFilesSelectList, Model.MyFilesSelectList)
+            <input type="submit" value="submit" />
+        }
+    </div>
+
 </div>
